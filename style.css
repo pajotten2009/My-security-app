@@ -1,0 +1,21 @@
+:root {
+    --orange: #FF8C00;
+    --red: #ff3b30;
+    --green: #34c759;
+    --bg: #ffffff;
+    --text: #1a1a1a;
+}
+
+body {
+    font-family: -apple-system, system-ui, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    border: 12px solid var(--orange);
+    box-sizing: border-box;
+}
+
+/* ... resto del código que te pasé antes ... */
