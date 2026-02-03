@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SECURITY PRO</title>
+    <title>SECURITY PRO - SAMU</title>
     <style>
-        /* EL DISEÑO (CSS) */
         :root {
-            --orange: #FF8C00;
-            --red: #ff3b30;
-            --green: #34c759;
-            --bg: #ffffff;
-            --text: #1a1a1a;
+            --bg: #000000;
+            --card: #1c1c1e;
+            --police: #0a84ff;
+            --emergency: #ff453a;
+            --family: #30d158;
+            --text: #ffffff;
+            --accent: #ffd60a;
         }
 
         body {
@@ -19,155 +20,185 @@
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
             height: 100vh;
-            border: 12px solid var(--orange);
-            box-sizing: border-box;
             overflow: hidden;
+            -webkit-user-select: none;
         }
 
-        .header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 15px 20px; 
-            background: white;
-            z-index: 10;
+        /* Cabecera Minimalista */
+        .header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
         }
 
-        .header h1 { font-size: 1rem; font-weight: 900; color: var(--orange); margin: 0; }
-        .settings-btn { font-size: 1.8rem; cursor: pointer; }
+        .header h1 { font-size: 1.2rem; margin: 0; font-weight: 800; letter-spacing: -0.5px; }
+        .settings-icon { font-size: 1.5rem; opacity: 0.6; padding: 10px; }
 
-        .screen { display: none; flex-direction: column; padding: 20px; flex-grow: 1; overflow-y: auto; }
+        /* Pantallas */
+        .screen { display: none; flex-direction: column; padding: 15px; flex-grow: 1; animation: fadeIn 0.3s ease; }
         .active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .btn-stack { display: flex; flex-direction: column; gap: 15px; justify-content: center; flex-grow: 1; }
+        .welcome-msg { text-align: center; margin: 10px 0 20px; font-size: 1.1rem; color: var(--accent); }
+
+        /* Botones Gigantes (Estilo iOS) */
+        .btn-stack { display: flex; flex-direction: column; gap: 15px; flex-grow: 1; justify-content: flex-start; }
         
         .action-btn {
-            height: 110px;
+            width: 100%;
+            height: 120px;
             border: none;
-            border-radius: 22px;
-            font-size: 1.4rem;
-            font-weight: 800;
-            cursor: pointer;
+            border-radius: 28px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            padding: 0 25px;
             text-decoration: none;
             transition: transform 0.1s;
+            box-sizing: border-box;
         }
 
-        .btn-police { background: var(--red); color: white; box-shadow: 0 6px 12px rgba(255,59,48,0.3); }
-        .btn-112 { background: var(--green); color: white; box-shadow: 0 6px 12px rgba(52,199,89,0.3); }
-        .btn-family { background: white; color: var(--orange); border: 4px solid var(--orange); }
-        
-        .action-btn:active { transform: scale(0.96); }
-        .btn-subtitle { font-size: 0.75rem; font-weight: 400; margin-top: 4px; opacity: 0.9; }
+        .action-btn:active { transform: scale(0.97); brightness: 1.2; }
 
-        /* Estilos de Ajustes */
-        .form-group { display: flex; flex-direction: column; margin-bottom: 12px; }
-        label { font-size: 0.8rem; font-weight: 700; color: var(--orange); margin-bottom: 4px; text-transform: uppercase; }
-        input, select { padding: 14px; border: 2px solid #eee; border-radius: 12px; font-size: 1rem; outline: none; }
-        input:focus { border-color: var(--orange); }
-        .save-btn { background: var(--orange); color: white; padding: 18px; border: none; border-radius: 15px; font-weight: 800; margin-top: 15px; cursor: pointer; }
+        .icon-circle {
+            width: 60px; height: 60px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; margin-right: 20px; background: rgba(255,255,255,0.1);
+        }
+
+        .btn-text { display: flex; flex-direction: column; text-align: left; }
+        .btn-title { font-size: 1.4rem; font-weight: 800; }
+        .btn-desc { font-size: 0.85rem; opacity: 0.8; font-weight: 500; }
+
+        .btn-pol { background-color: var(--police); color: white; }
+        .btn-sos { background-color: var(--emergency); color: white; }
+        .btn-fam { background-color: var(--family); color: white; }
+
+        /* Selector de Contactos */
+        #selector {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: none; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .selector-card { background: var(--card); width: 85%; border-radius: 35px; padding: 25px; }
+        .contact-row {
+            padding: 20px; margin: 10px 0; background: #2c2c2e; border-radius: 20px;
+            font-size: 1.3rem; font-weight: 700; color: var(--family); border: 1px solid #444;
+        }
+
+        /* Formulario Ajustes */
+        .form { gap: 15px; display: flex; flex-direction: column; }
+        label { font-weight: 700; color: var(--accent); font-size: 0.9rem; }
+        input { background: #2c2c2e; border: 1px solid #444; color: white; padding: 15px; border-radius: 15px; font-size: 1.1rem; }
+        .save-btn { background: var(--accent); color: black; padding: 20px; border-radius: 20px; font-weight: 800; border: none; margin-top: 20px; font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div style="width: 30px;"></div>
-        <h1>SECURITY <span style="color:#333">PRO</span></h1>
-        <div class="settings-btn" onclick="openSettings()">⚙️</div>
+        <h1>SECURITY <span style="color:var(--police)">PRO</span></h1>
+        <div class="settings-icon" onclick="toggleSettings()">⚙️</div>
     </div>
 
     <div id="main-screen" class="screen">
-        <div style="text-align: center; margin-bottom: 10px;">
-            <h2 id="txt-greet">Hola, <span id="user-display" style="color: var(--orange);"></span></h2>
-        </div>
-        
+        <div class="welcome-msg">Hola, <span id="user-name"></span></div>
         <div class="btn-stack">
-            <a href="tel:091" class="action-btn btn-police">
-                <span>🚔 POLICÍA 091</span>
-                <span class="btn-subtitle">NACIONAL</span>
+            <a href="tel:091" class="action-btn btn-pol">
+                <div class="icon-circle">🚔</div>
+                <div class="btn-text"><span class="btn-title">Policía</span><span class="btn-desc">Llamar al 091</span></div>
             </a>
 
-            <a href="tel:112" class="action-btn btn-112">
-                <span>🚑 EMERGENCIAS 112</span>
-                <span class="btn-subtitle">MÉDICO / BOMBEROS</span>
+            <a href="tel:112" class="action-btn btn-sos">
+                <div class="icon-circle">🚑</div>
+                <div class="btn-text"><span class="btn-title">Urgencias</span><span class="btn-desc">Ambulancia y Bomberos</span></div>
             </a>
 
-            <button onclick="executeFamilyAlert()" class="action-btn btn-family">
-                <span>📲 CONTACTO SOS</span>
-                <span class="btn-subtitle">SMS + LLAMADA PRIVADA</span>
-            </button>
+            <div onclick="openSelector()" class="action-btn btn-fam">
+                <div class="icon-circle">👤</div>
+                <div class="btn-text"><span class="btn-title">Familiares</span><span class="btn-desc">Enviar ubicación y llamar</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="selector" onclick="closeSelector()">
+        <div class="selector-card" onclick="event.stopPropagation()">
+            <h2 style="margin-top:0">¿A quién avisar?</h2>
+            <div id="c1" class="contact-row" onclick="sendSOS(1)">Contacto 1</div>
+            <div id="c2" class="contact-row" onclick="sendSOS(2)">Contacto 2</div>
+            <div id="c3" class="contact-row" onclick="sendSOS(3)">Contacto 3</div>
+            <p onclick="closeSelector()" style="margin-top:20px; opacity:0.6">Cancelar</p>
         </div>
     </div>
 
     <div id="settings-screen" class="screen">
-        <h2 style="text-align:center; color: var(--orange);">AJUSTES</h2>
-        <div class="form-group">
-            <label>Nombre</label>
-            <input type="text" id="name-input" placeholder="Tu nombre">
+        <h2>Configuración</h2>
+        <div class="form">
+            <label>TU NOMBRE</label>
+            <input type="text" id="in-name">
+            <label>CONTACTO 1 (Principal)</label>
+            <div style="display:flex; gap:10px;"><input style="flex:1" id="in-n1" placeholder="Nombre"><input style="flex:1" id="in-p1" placeholder="Tel"></div>
+            <label>CONTACTO 2</label>
+            <div style="display:flex; gap:10px;"><input style="flex:1" id="in-n2" placeholder="Nombre"><input style="flex:1" id="in-p2" placeholder="Tel"></div>
+            <label>CONTACTO 3</label>
+            <div style="display:flex; gap:10px;"><input style="flex:1" id="in-n3" placeholder="Nombre"><input style="flex:1" id="in-p3" placeholder="Tel"></div>
+            <button class="save-btn" onclick="save()">GUARDAR CAMBIOS</button>
         </div>
-        <div class="form-group">
-            <label>Teléfono Familiar</label>
-            <input type="tel" id="phone-input" placeholder="Ej: 600000000">
-        </div>
-        <div class="form-group">
-            <label>Idioma</label>
-            <select id="lang-input">
-                <option value="es">Español</option>
-                <option value="en">English</option>
-            </select>
-        </div>
-        <button class="save-btn" onclick="saveSettings()">GUARDAR CAMBIOS</button>
     </div>
 
     <script>
-        /* LA LÓGICA (JS) */
-        let currentCoords = "Obteniendo ubicación...";
+        let coords = "";
+        navigator.geolocation.watchPosition(p => {
+            coords = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+        }, null, {enableHighAccuracy:true});
 
-        navigator.geolocation.watchPosition(
-            p => { currentCoords = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`; },
-            e => { console.error(e); },
-            { enableHighAccuracy: true }
-        );
-
-        function openSettings() {
-            document.getElementById('main-screen').classList.remove('active');
-            document.getElementById('settings-screen').classList.add('active');
+        function toggleSettings() {
+            document.getElementById('main-screen').classList.toggle('active');
+            document.getElementById('settings-screen').classList.toggle('active');
         }
 
-        function saveSettings() {
-            const n = document.getElementById('name-input').value;
-            const p = document.getElementById('phone-input').value;
-            const l = document.getElementById('lang-input').value;
-            if(n && p) {
-                localStorage.setItem('s_name', n);
-                localStorage.setItem('s_phone', p);
-                localStorage.setItem('s_lang', l);
-                location.reload(); // Recarga para aplicar todo
-            }
+        function save() {
+            const config = {
+                name: document.getElementById('in-name').value,
+                contacts: [
+                    { n: document.getElementById('in-n1').value, p: document.getElementById('in-p1').value },
+                    { n: document.getElementById('in-n2').value, p: document.getElementById('in-p2').value },
+                    { n: document.getElementById('in-n3').value, p: document.getElementById('in-p3').value }
+                ]
+            };
+            localStorage.setItem('security_cfg', JSON.stringify(config));
+            location.reload();
         }
 
         window.onload = () => {
-            const n = localStorage.getItem('s_name');
-            if(!n) {
-                openSettings();
-            } else {
-                document.getElementById('user-display').innerText = n;
-                document.getElementById('main-screen').classList.add('active');
-            }
+            const data = JSON.parse(localStorage.getItem('security_cfg'));
+            if(!data) { document.getElementById('settings-screen').classList.add('active'); return; }
+            
+            document.getElementById('user-name').innerText = data.name;
+            document.getElementById('in-name').value = data.name;
+            
+            data.contacts.forEach((c, i) => {
+                document.getElementById(`in-n${i+1}`).value = c.n;
+                document.getElementById(`in-p${i+1}`).value = c.p;
+                const row = document.getElementById(`c${i+1}`);
+                if(c.n) row.innerText = c.n; else row.style.display = 'none';
+            });
+            document.getElementById('main-screen').classList.add('active');
         };
 
-        function executeFamilyAlert() {
-            const n = localStorage.getItem('s_name');
-            const p = localStorage.getItem('s_phone');
-            const msg = `¡EMERGENCIA! Soy ${n}. Mi ubicación exacta: ${currentCoords}`;
-            window.location.href = `sms:${p}?&body=${encodeURIComponent(msg)}`;
-            setTimeout(() => { window.location.href = `tel:${p}`; }, 2500);
+        function openSelector() { document.getElementById('selector').style.display = 'flex'; }
+        function closeSelector() { document.getElementById('selector').style.display = 'none'; }
+
+        function sendSOS(index) {
+            const data = JSON.parse(localStorage.getItem('security_cfg'));
+            const c = data.contacts[index-1];
+            const msg = `¡AUXILIO! Soy ${data.name}. Mi ubicación: ${coords}`;
+            window.location.href = `sms:${c.p}?&body=${encodeURIComponent(msg)}`;
+            setTimeout(() => { window.location.href = `tel:${c.p}`; }, 3000);
         }
     </script>
 </body>
