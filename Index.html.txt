@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Security APP</title>
+    <style>
+        :root { --orange: #FF8C00; --white: #ffffff; --gray: #f4f4f4; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--white); margin: 0; display: flex; flex-direction: column; height: 100vh;
+            border: 8px solid var(--orange); box-sizing: border-box;
+        }
+
+        /* Pantalla de Registro */
+        #registration-screen { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 20px; text-align: center;
+        }
+
+        /* Pantalla Principal (Oculta al inicio) */
+        #main-app { display: none; flex-direction: column; height: 100%; padding: 20px; }
+
+        h1 { color: var(--orange); text-transform: uppercase; font-size: 1.5rem; margin-bottom: 5px; }
+        .welcome-text { font-size: 1.2rem; margin-bottom: 30px; color: #333; }
+
+        input {
+            width: 80%; padding: 12px; margin: 10px 0; border: 2px solid var(--orange); border-radius: 8px; font-size: 1rem;
+        }
+
+        .btn {
+            width: 100%; padding: 20px; margin: 10px 0; border: none; border-radius: 12px;
+            font-size: 1.3rem; font-weight: bold; cursor: pointer; text-decoration: none;
+            display: flex; align-items: center; justify-content: center; transition: 0.2s;
+        }
+
+        .btn-save { background-color: var(--orange); color: white; }
+        .btn-112 { background-color: #ff4444; color: white; border: 4px solid var(--orange); }
+        .btn-family { background-color: var(--white); color: var(--orange); border: 4px solid var(--orange); }
+        
+        .btn:active { transform: scale(0.95); }
+
+        #config-link { color: var(--orange); font-size: 0.8rem; text-decoration: underline; margin-top: auto; text-align: center; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="registration-screen">
+        <h1>My Security APP</h1>
+        <p>Configura tu perfil de seguridad</p>
+        <input type="text" id="reg-name" placeholder="Tu Nombre">
+        <input type="number" id="reg-age" placeholder="Tu Edad">
+        <input type="tel" id="reg-family" placeholder="Teléfono Familiar (ej. 600000000)">
+        <button class="btn btn-save" onclick="saveData()">EMPEZAR</button>
+    </div>
+
+    <div id="main-app">
+        <h1>My Security APP</h1>
+        <div class="welcome-text" id="welcome-msg">Bienvenid@, </div>
+        
+        <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
+            <a href="tel:112" class="btn btn-112">🚨 LLAMAR 112</a>
+            <a href="#" id="family-link" class="btn btn-family">📞 FAMILIAR</a>
+        </div>
+
+        <div id="config-link" onclick="resetData()">Cambiar configuración</div>
+    </div>
+
+    <script>
+        // Al cargar la web, vemos si ya hay datos
+        window.onload = function() {
+            if (localStorage.getItem('userName')) {
+                showMainApp();
+            }
+        };
+
+        function saveData() {
+            const name = document.getElementById('reg-name').value;
+            const age = document.getElementById('reg-age').value;
+            const family = document.getElementById('reg-family').value;
+
+            if (name && age && family) {
+                localStorage.setItem('userName', name);
+                localStorage.setItem('userAge', age);
+                localStorage.setItem('familyPhone', family);
+                showMainApp();
+            } else {
+                alert("Por favor, rellena todos los datos.");
+            }
+        }
+
+        function showMainApp() {
+            document.getElementById('registration-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+            
+            const name = localStorage.getItem('userName');
+            const familyPhone = localStorage.getItem('familyPhone');
+            
+            document.getElementById('welcome-msg').innerText = `Bienvenid@, ${name}`;
+            document.getElementById('family-link').href = `tel:${familyPhone}`;
+        }
+
+        function resetData() {
+            if(confirm("¿Quieres cambiar tus datos?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
